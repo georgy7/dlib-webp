@@ -15,20 +15,19 @@ SuperImage loadWEBP(InputStream istrm) {
     return null;
 }
 
-// TODO Alpha channel
-Compound!(bool, string) saveWEBP(SuperImage img, OutputStream output) {
+Compound!(bool, string) saveWEBP(SuperImage img, int quality, OutputStream output) {
     SuperImage inputImage = img;
-    if (PixelFormat.RGB8 != img.pixelFormat) {
-        inputImage = convert!(Image!(PixelFormat.RGB8))(img);
+    if (PixelFormat.RGBA8 != img.pixelFormat) {
+        inputImage = convert!(Image!(PixelFormat.RGBA8))(img);
     }
 
     ubyte* outputPointer;
-    size_t outputSize = WebPEncodeRGB(
+    size_t outputSize = WebPEncodeRGBA(
             inputImage.data.ptr,
             img.width(),
             img.height(),
-            img.width() * 3,
-            100,
+            img.width() * 4,
+            quality,
             &outputPointer);
     GC.addRange(outputPointer, outputSize);
     output.writeArray(outputPointer[0 .. outputSize]);
@@ -38,7 +37,7 @@ Compound!(bool, string) saveWEBP(SuperImage img, OutputStream output) {
 
 private void saveIt(SuperImage input, string filename) {
     OutputStream outputStream = openForOutput(filename);
-    Compound!(bool, string) res = saveWEBP(cast(SuperImage)input, outputStream);
+    Compound!(bool, string) res = saveWEBP(cast(SuperImage)input, 85, outputStream);
     outputStream.close();
     assert(res[0]);
 }
@@ -51,7 +50,15 @@ unittest {
 
     auto input2 = convert!(Image!(PixelFormat.L8))(RandomImages.circles(1920, 1080));
     saveIt(input2, "test2.webp");
-    
+
     auto input3 = convert!(Image!(PixelFormat.RGBA16))(RandomImages.circles(1920, 1080));
     saveIt(input3, "test3.webp");
+
+    SuperImage red = new Image!(PixelFormat.RGBA8)(500, 400);
+    foreach(int x; 0..red.width) {
+        foreach(int y; 0..red.height) {
+            red[x, y] = Color4f(1f, 0f,0f,0.8f);
+        }
+    }
+    saveIt(red, "red.webp");
 }
