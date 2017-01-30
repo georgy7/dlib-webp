@@ -16,11 +16,25 @@ SuperImage loadWEBP(InputStream istrm) {
 }
 
 Compound!(bool, string) saveWEBP(SuperImage img, int quality, OutputStream output) {
+    ubyte[] result;
+    if (PixelFormat.L8 == img.pixelFormat ||
+            PixelFormat.RGB8 == img.pixelFormat ||
+            PixelFormat.L16 == img.pixelFormat ||
+            PixelFormat.RGB16 == img.pixelFormat) {
+        result = saveWithoutAlpha(img, quality);
+    } else {
+        result = saveWithAlpha(img, quality);
+    }
+    output.writeArray(result);
+    return compound(true, "");
+}
+
+
+private ubyte[] saveWithAlpha(SuperImage img, int quality) {
     SuperImage inputImage = img;
     if (PixelFormat.RGBA8 != img.pixelFormat) {
         inputImage = convert!(Image!(PixelFormat.RGBA8))(img);
     }
-
     ubyte* outputPointer;
     size_t outputSize = WebPEncodeRGBA(
             inputImage.data.ptr,
@@ -30,8 +44,23 @@ Compound!(bool, string) saveWEBP(SuperImage img, int quality, OutputStream outpu
             quality,
             &outputPointer);
     GC.addRange(outputPointer, outputSize);
-    output.writeArray(outputPointer[0 .. outputSize]);
-    return compound(true, "");
+    return outputPointer[0 .. outputSize];
+}
+private ubyte[] saveWithoutAlpha(SuperImage img, int quality) {
+    SuperImage inputImage = img;
+    if (PixelFormat.RGB8 != img.pixelFormat) {
+        inputImage = convert!(Image!(PixelFormat.RGB8))(img);
+    }
+    ubyte* outputPointer;
+    size_t outputSize = WebPEncodeRGB(
+            inputImage.data.ptr,
+            img.width(),
+            img.height(),
+            img.width() * 3,
+            quality,
+            &outputPointer);
+    GC.addRange(outputPointer, outputSize);
+    return outputPointer[0 .. outputSize];
 }
 
 
