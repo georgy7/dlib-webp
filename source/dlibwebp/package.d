@@ -11,22 +11,41 @@ private {
     import core.memory : GC;
 }
 
+class WEBPLoadException: ImageLoadException {
+    this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable next = null) {
+        super(msg, file, line, next);
+    }
+}
+
 SuperImage loadWEBP(InputStream istrm) {
     return null;
 }
 
+void saveWEBP(SuperImage img, int quality, string filename) {
+    OutputStream output = openForOutput(filename);
+    Compound!(bool, string) res = saveWEBP(img, quality, output);
+    output.close();
+
+    if (!res[0]) {
+        throw new WEBPLoadException(res[1]);
+    }
+}
+
 Compound!(bool, string) saveWEBP(SuperImage img, int quality, OutputStream output) {
-    ubyte[] result;
+    ubyte[] result = saveWEBPToArray(img, quality);
+    output.writeArray(result);
+    return compound(true, "");
+}
+
+ubyte[] saveWEBPToArray(SuperImage img, int quality) {
     if (PixelFormat.L8 == img.pixelFormat ||
             PixelFormat.RGB8 == img.pixelFormat ||
             PixelFormat.L16 == img.pixelFormat ||
             PixelFormat.RGB16 == img.pixelFormat) {
-        result = saveWithoutAlpha(img, quality);
+        return saveWithoutAlpha(img, quality);
     } else {
-        result = saveWithAlpha(img, quality);
+        return saveWithAlpha(img, quality);
     }
-    output.writeArray(result);
-    return compound(true, "");
 }
 
 
@@ -72,16 +91,18 @@ private void saveIt(SuperImage input, string filename) {
 }
 
 unittest {
-
-    SuperImage input = RandomImages.circles(1920, 1080);
-    string filename = "test1.webp";
+    SuperImage input = RandomImages.circles(500, 400);
+    string filename = "test_simple.webp";
     saveIt(input, filename);
 
-    auto input2 = convert!(Image!(PixelFormat.L8))(RandomImages.circles(1920, 1080));
-    saveIt(input2, "test2.webp");
+    auto inputL8 = convert!(Image!(PixelFormat.L8))(RandomImages.circles(500, 400));
+    saveIt(inputL8, "test_L8.webp");
 
-    auto input3 = convert!(Image!(PixelFormat.RGBA16))(RandomImages.circles(1920, 1080));
-    saveIt(input3, "test3.webp");
+    auto inputLA8 = convert!(Image!(PixelFormat.LA8))(RandomImages.circles(500, 400));
+    saveIt(inputLA8, "test_LA8.webp");
+
+    auto inputRgba16 = convert!(Image!(PixelFormat.RGBA16))(RandomImages.circles(1920, 1080));
+    saveIt(inputRgba16, "test_RGBA16.webp");
 
     SuperImage red = new Image!(PixelFormat.RGBA8)(500, 400);
     foreach(int x; 0..red.width) {
@@ -89,5 +110,9 @@ unittest {
             red[x, y] = Color4f(1f, 0f,0f,0.8f);
         }
     }
-    saveIt(red, "red.webp");
+    saveIt(red, "red_RGBA8.webp");
+}
+
+unittest {
+    saveWEBP(RandomImages.circles(500, 400), 100, "test_to_file.webp");
 }
