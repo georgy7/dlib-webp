@@ -30,9 +30,23 @@ void saveWEBP(SuperImage img, int quality, string filename) {
         throw new WEBPLoadException(res[1]);
     }
 }
+void saveLosslessWEBP(SuperImage img, string filename) {
+    OutputStream output = openForOutput(filename);
+    Compound!(bool, string) res = saveLosslessWEBP(img, output);
+    output.close();
+
+    if (!res[0]) {
+        throw new WEBPLoadException(res[1]);
+    }
+}
 
 Compound!(bool, string) saveWEBP(SuperImage img, int quality, OutputStream output) {
     ubyte[] result = saveWEBPToArray(img, quality);
+    output.writeArray(result);
+    return compound(true, "");
+}
+Compound!(bool, string) saveLosslessWEBP(SuperImage img, OutputStream output) {
+    ubyte[] result = saveLosslessWEBPToArray(img);
     output.writeArray(result);
     return compound(true, "");
 }
@@ -42,14 +56,24 @@ ubyte[] saveWEBPToArray(SuperImage img, int quality) {
             PixelFormat.RGB8 == img.pixelFormat ||
             PixelFormat.L16 == img.pixelFormat ||
             PixelFormat.RGB16 == img.pixelFormat) {
-        return saveWithoutAlpha(img, quality);
+        return saveLossy(img, quality);
     } else {
-        return saveWithAlpha(img, quality);
+        return saveLossyWithAlpha(img, quality);
+    }
+}
+ubyte[] saveLosslessWEBPToArray(SuperImage img) {
+    if (PixelFormat.L8 == img.pixelFormat ||
+            PixelFormat.RGB8 == img.pixelFormat ||
+            PixelFormat.L16 == img.pixelFormat ||
+            PixelFormat.RGB16 == img.pixelFormat) {
+        return saveLossless(img);
+    } else {
+        return saveLosslessWithAlpha(img);
     }
 }
 
 
-private ubyte[] saveWithAlpha(SuperImage img, int quality) {
+private ubyte[] saveLossyWithAlpha(SuperImage img, int quality) {
     SuperImage inputImage = img;
     if (PixelFormat.RGBA8 != img.pixelFormat) {
         inputImage = convert!(Image!(PixelFormat.RGBA8))(img);
@@ -65,7 +89,7 @@ private ubyte[] saveWithAlpha(SuperImage img, int quality) {
     GC.addRange(outputPointer, outputSize);
     return outputPointer[0 .. outputSize];
 }
-private ubyte[] saveWithoutAlpha(SuperImage img, int quality) {
+private ubyte[] saveLossy(SuperImage img, int quality) {
     SuperImage inputImage = img;
     if (PixelFormat.RGB8 != img.pixelFormat) {
         inputImage = convert!(Image!(PixelFormat.RGB8))(img);
@@ -77,6 +101,37 @@ private ubyte[] saveWithoutAlpha(SuperImage img, int quality) {
             img.height(),
             img.width() * 3,
             quality,
+            &outputPointer);
+    GC.addRange(outputPointer, outputSize);
+    return outputPointer[0 .. outputSize];
+}
+
+private ubyte[] saveLosslessWithAlpha(SuperImage img) {
+    SuperImage inputImage = img;
+    if (PixelFormat.RGBA8 != img.pixelFormat) {
+        inputImage = convert!(Image!(PixelFormat.RGBA8))(img);
+    }
+    ubyte* outputPointer;
+    size_t outputSize = WebPEncodeLosslessRGBA(
+            inputImage.data.ptr,
+            img.width(),
+            img.height(),
+            img.width() * 4,
+            &outputPointer);
+    GC.addRange(outputPointer, outputSize);
+    return outputPointer[0 .. outputSize];
+}
+private ubyte[] saveLossless(SuperImage img) {
+    SuperImage inputImage = img;
+    if (PixelFormat.RGB8 != img.pixelFormat) {
+        inputImage = convert!(Image!(PixelFormat.RGB8))(img);
+    }
+    ubyte* outputPointer;
+    size_t outputSize = WebPEncodeLosslessRGB(
+            inputImage.data.ptr,
+            img.width(),
+            img.height(),
+            img.width() * 3,
             &outputPointer);
     GC.addRange(outputPointer, outputSize);
     return outputPointer[0 .. outputSize];
@@ -114,5 +169,7 @@ unittest {
 }
 
 unittest {
-    saveWEBP(RandomImages.circles(500, 400), 100, "test_to_file.webp");
+    auto img = RandomImages.circles(500, 400);
+    saveWEBP(img, 100, "test_to_file.webp");
+    saveLosslessWEBP(img, "test_to_file_lossless.webp");
 }
