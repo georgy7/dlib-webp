@@ -1,0 +1,8 @@
+lib/
+*.settings
+workspace.dlangidews.wssettings
+.dub/
+dub.selections.json
+test*.png
+*.webp
+.directory

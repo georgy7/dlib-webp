@@ -1,0 +1,9 @@
+{
+    "name": "workspace",
+    "description": null,
+    "projects": {
+        "dlib-webp": "dub.json"
+    },
+    "includePath": {
+    }
+}

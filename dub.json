@@ -1,0 +1,17 @@
+{
+    "name": "dlib-webp",
+    "description": "saveWEBP and loadWEBP",
+    "license": "Boost",
+    "authors": [
+        "Георгий Устинов"
+    ],
+
+    "targetName": "dlib-webp",
+    "targetType": "staticLibrary",
+    "targetPath": "lib",
+    "dependencies": {
+        "dlib": "~>0.10.0",
+        "random-dlib-image": "~>1.0.2",
+        "libwebp": "~>0.4.4"
+    }
+}
