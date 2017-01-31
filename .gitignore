@@ -6,3 +6,5 @@ dub.selections.json
 test*.png
 *.webp
 .directory
+.idea/
+

@@ -23,3 +23,13 @@ void main() {
   // ubyte[] lossless = img.saveLosslessWEBPToArray();
 }
 ```
+
+## License
+
+Boost Software License, Version 1.0 http://www.boost.org/LICENSE_1_0.txt
+
+Dependencies:
+
+- **libwebp** BSD 3-clause
+- **dlib** Boost Software License, Version 1.0
+- **random-dlib-image** (for testing) Boost Software License, Version 1.0

@@ -9,6 +9,7 @@ private {
     import dlib.core.stream;
     import dlib.filesystem.local;
     import core.memory : GC;
+    import std.array;
 }
 
 class WEBPLoadException: ImageLoadException {
@@ -17,9 +18,42 @@ class WEBPLoadException: ImageLoadException {
     }
 }
 
-SuperImage loadWEBP(InputStream istrm) {
-    return null;
+SuperImage loadWEBP(string filename) {
+    InputStream input = openForInput(filename);
+    auto img = loadWEBP(input);
+    input.close();
+    return img;
 }
+
+SuperImage loadWEBP(InputStream input) {
+    auto fileContent = appender!(ubyte[])();
+    ubyte[0x1000] buffer;
+    while (input.readable) {
+        size_t count = input.readBytes(buffer.ptr, buffer.length);
+        if (count == 0) {
+            break;
+        }
+        for (int i = 0; i < count; i++) {
+            fileContent.put(buffer[i]);
+        }
+    }
+    return loadWEBPFromArray(fileContent.data);
+}
+
+SuperImage loadWEBPFromArray(in ubyte[] webp) {
+    int width;
+    int height;
+    ubyte* argbPointer = WebPDecodeRGBA(webp.ptr, webp.length, &width, &height);
+    GC.addRange(argbPointer, (width * height * 4));
+    ubyte[] argbArray = argbPointer[0 .. (width * height * 4)];
+
+    SuperImage rgbaImage = defaultImageFactory.createImage(width, height, 4, 8);
+    foreach(i, v; argbArray) {
+        rgbaImage.data[i] = v;
+    }
+    return rgbaImage;
+}
+
 
 void saveWEBP(SuperImage img, int quality, string filename) {
     OutputStream output = openForOutput(filename);
@@ -172,4 +206,6 @@ unittest {
     auto img = RandomImages.circles(500, 400);
     saveWEBP(img, 100, "test_to_file.webp");
     saveLosslessWEBP(img, "test_to_file_lossless.webp");
+    auto readedBack = loadWEBP("test_to_file_lossless.webp");
+    readedBack.savePNG("test_to_file.png");
 }
