@@ -25,8 +25,8 @@ void main() {
   // ubyte[] lossless = img.saveLosslessWEBPToArray();
   
   // And back.
-  auto readedBack = loadWEBP("lossless.webp");
-  readedBack.savePNG("lossless.png");
+  auto readBack = loadWEBP("lossless.webp");
+  readBack.savePNG("lossless.png");
   
   // Also available:
   // loadWEBP(inputStream)
