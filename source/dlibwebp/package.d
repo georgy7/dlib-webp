@@ -37,10 +37,10 @@ SuperImage loadWEBP(InputStream input) {
             fileContent.put(buffer[i]);
         }
     }
-    return loadWEBPFromArray(fileContent.data);
+    return loadWEBP(fileContent.data);
 }
 
-SuperImage loadWEBPFromArray(in ubyte[] webp) {
+SuperImage loadWEBP(in ubyte[] webp) {
     int width;
     int height;
     ubyte* argbPointer = WebPDecodeRGBA(webp.ptr, webp.length, &width, &height);
