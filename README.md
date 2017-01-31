@@ -1,3 +1,5 @@
+<a href="https://code.dlang.org/packages/dlib-webp" title="Go to dlib-webp"><img src="https://img.shields.io/dub/v/dlib-webp.svg" alt="Dub version"></a>
+
 ## Usage
 
 ```d
@@ -21,6 +23,14 @@ void main() {
   // Also, you can save to arrays:
   // ubyte[] lossy = img.saveWEBPToArray(50);
   // ubyte[] lossless = img.saveLosslessWEBPToArray();
+  
+  // And back.
+  auto readBack = loadWEBP("lossless.webp");
+  readBack.savePNG("lossless.png");
+  
+  // Also available:
+  // loadWEBP(inputStream)
+  // loadWEBP(ubyte[])
 }
 ```
 
