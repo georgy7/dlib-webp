@@ -13,6 +13,6 @@
         "dlib": "~>0.10.0",
         "libwebp": "~>0.4.4",
         "feature-test-d": "~>1.0.4",
-        "random-dlib-image": "~>1.0.2"
+        "random-dlib-image": "~>1.0.3"
     }
 }

@@ -187,7 +187,9 @@ private void saveIt(SuperImage input, string filename) {
  *
  */
 debug (featureTest) {
-	import feature_test;
+    import feature_test;
+    import randomdlibimage;
+    import std.math;
 
     private SuperImage createImageWithColour(PixelFormat format)(int w, int h, Color4f c) {
         SuperImage img = new Image!(format)(w, h);
@@ -216,7 +218,6 @@ debug (featureTest) {
             }
         }
     }
-
     unittest {
 
         feature("Filesystem i/o RGBA8. Lossless.", (f) {
@@ -249,6 +250,28 @@ debug (featureTest) {
                     "lossless_RGBA8_blue.webp",
                     Color4f(0f, 0f, 1f, 1f)
                 );
+            });
+            f.scenario("Blue 1.0. Opacity 0.8.", {
+                colorTestLossless!(PixelFormat.RGBA8)(
+                    "lossless_RGBA8_blue.webp",
+                    Color4f(0f, 0f, 1f, 0.8f)
+                );
+            });
+            f.scenario("Random image.", {
+                const fn = "lossless_RGBA8_random.webp";
+                {
+                    SuperImage img = RandomImages.circles!(PixelFormat.RGBA8)(100, 50);
+                    // Alpha pixel.
+                    img[0, 0] = Color4f(
+                        img[0, 0].r,
+                        img[0, 0].g,
+                        img[0, 0].b,
+                        0.8f);
+                    img.saveLosslessWEBP(fn);
+                }
+                SuperImage result = loadWEBP(fn);
+                abs(result[0, 0].a - 0.8f).shouldBeLessThan(0.02f); // Alpha pixel!
+                abs(result[1, 0].a - 1.0f).shouldBeLessThan(0.01f);
             });
         });
 
@@ -284,8 +307,80 @@ debug (featureTest) {
                     Color4f(0f, 0f, 1f, 1f)
                 );
             });
+            f.scenario("Blue 1.0. Opacity 0.8.", {
+                colorTestLossless!(PixelFormat.RGBA16)(
+                    "lossless_RGBA16_blue.webp",
+                    Color4f(0f, 0f, 1f, 0.8f)
+                );
+            });
         });
 
+        feature("Filesystem i/o RGB-8. Lossless.", (f) {
+            f.scenario("Red 1.0", {
+                colorTestLossless!(PixelFormat.RGB8)(
+                    "lossless_RGB8_red.webp",
+                    Color4f(1f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Red 0.5", {
+                colorTestLossless!(PixelFormat.RGB8)(
+                    "lossless_RGB8_red_0.5.webp",
+                    Color4f(0.5f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Red 0.01", {
+                colorTestLossless!(PixelFormat.RGB8)(
+                    "lossless_RGB8_red_0.01.webp",
+                    Color4f(0.01f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Green 1.0", {
+                colorTestLossless!(PixelFormat.RGB8)(
+                    "lossless_RGB8_green.webp",
+                    Color4f(0f, 1f, 0f, 1f)
+                );
+            });
+            f.scenario("Blue 1.0", {
+                colorTestLossless!(PixelFormat.RGB8)(
+                    "lossless_RGB8_blue.webp",
+                    Color4f(0f, 0f, 1f, 1f)
+                );
+            });
+        });
+
+
+        feature("Filesystem i/o RGB-16. Lossless.", (f) {
+            f.scenario("Red 1.0", {
+                colorTestLossless!(PixelFormat.RGB16)(
+                    "lossless_RGB16_red.webp",
+                    Color4f(1f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Red 0.5", {
+                colorTestLossless!(PixelFormat.RGB16)(
+                    "lossless_RGB16_red_0.5.webp",
+                    Color4f(0.5f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Red 0.01", {
+                colorTestLossless!(PixelFormat.RGB16)(
+                    "lossless_RGB16_red_0.01.webp",
+                    Color4f(0.01f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Green 1.0", {
+                colorTestLossless!(PixelFormat.RGB16)(
+                    "lossless_RGB16_green.webp",
+                    Color4f(0f, 1f, 0f, 1f)
+                );
+            });
+            f.scenario("Blue 1.0", {
+                colorTestLossless!(PixelFormat.RGB16)(
+                    "lossless_RGB16_blue.webp",
+                    Color4f(0f, 0f, 1f, 1f)
+                );
+            });
+        });
     }
 }
 
