@@ -1,5 +1,9 @@
 <a href="https://code.dlang.org/packages/dlib-webp" title="Go to dlib-webp"><img src="https://img.shields.io/dub/v/dlib-webp.svg" alt="Dub version"></a>
 
+## Testing
+
+    dub test --debug=featureTest
+
 ## Usage
 
 ```d

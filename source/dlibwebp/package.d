@@ -2,7 +2,6 @@ module dlibwebp;
 
 private {
     import dlib.image;
-    import randomdlibimage;
     import webp.encode;
     import webp.decode;
     import dlib.core.compound;
@@ -171,15 +170,130 @@ private ubyte[] saveLossless(SuperImage img) {
     return outputPointer[0 .. outputSize];
 }
 
-
+/*
 private void saveIt(SuperImage input, string filename) {
     OutputStream outputStream = openForOutput(filename);
     Compound!(bool, string) res = saveWEBP(cast(SuperImage)input, 85, outputStream);
     outputStream.close();
     assert(res[0]);
 }
+*/
 
+
+
+/**
+ * Run the tests like this:
+ * dub test --debug=featureTest
+ *
+ */
+debug (featureTest) {
+	import feature_test;
+
+    private SuperImage createImageWithColour(PixelFormat format)(int w, int h, Color4f c) {
+        SuperImage img = new Image!(format)(w, h);
+        foreach(int x; 0..img.width) {
+            foreach(int y; 0..img.height) {
+                img[x, y] = c;
+            }
+        }
+        return img;
+    }
+    private void colorTestLossless(PixelFormat format)(in string fn, Color4f c) {
+        {
+            SuperImage redNonTransparent = createImageWithColour!(format)(500, 400, c);
+            redNonTransparent.saveLosslessWEBP(fn);
+        }
+        SuperImage result = loadWEBP(fn);
+        foreach(int x; 0..result.width) {
+            foreach(int y; 0..result.height) {
+                // WebP supports maximum 8-bit per channel.
+                Color4 expected = c.convert(8);
+                Color4 actual = result[x, y].convert(8);
+                expected.r.shouldEqual(actual.r);
+                expected.g.shouldEqual(actual.g);
+                expected.b.shouldEqual(actual.b);
+                expected.a.shouldEqual(actual.a);
+            }
+        }
+    }
+
+    unittest {
+
+        feature("Filesystem i/o RGBA8. Lossless.", (f) {
+            f.scenario("Red 1.0", {
+                colorTestLossless!(PixelFormat.RGBA8)(
+                    "lossless_RGBA8_red.webp",
+                    Color4f(1f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Red 0.5", {
+                colorTestLossless!(PixelFormat.RGBA8)(
+                    "lossless_RGBA8_red_0.5.webp",
+                    Color4f(0.5f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Red 0.01", {
+                colorTestLossless!(PixelFormat.RGBA8)(
+                    "lossless_RGBA8_red_0.01.webp",
+                    Color4f(0.01f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Green 1.0", {
+                colorTestLossless!(PixelFormat.RGBA8)(
+                    "lossless_RGBA8_green.webp",
+                    Color4f(0f, 1f, 0f, 1f)
+                );
+            });
+            f.scenario("Blue 1.0", {
+                colorTestLossless!(PixelFormat.RGBA8)(
+                    "lossless_RGBA8_blue.webp",
+                    Color4f(0f, 0f, 1f, 1f)
+                );
+            });
+        });
+
+
+        feature("Filesystem i/o RGBA16. Lossless.", (f) {
+            f.scenario("Red 1.0", {
+                colorTestLossless!(PixelFormat.RGBA16)(
+                    "lossless_RGBA16_red.webp",
+                    Color4f(1f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Red 0.5", {
+                colorTestLossless!(PixelFormat.RGBA16)(
+                    "lossless_RGBA16_red_0.5.webp",
+                    Color4f(0.5f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Red 0.01", {
+                colorTestLossless!(PixelFormat.RGBA16)(
+                    "lossless_RGBA16_red_0.01.webp",
+                    Color4f(0.01f, 0f, 0f, 1f)
+                );
+            });
+            f.scenario("Green 1.0", {
+                colorTestLossless!(PixelFormat.RGBA16)(
+                    "lossless_RGBA16_green.webp",
+                    Color4f(0f, 1f, 0f, 1f)
+                );
+            });
+            f.scenario("Blue 1.0", {
+                colorTestLossless!(PixelFormat.RGBA16)(
+                    "lossless_RGBA16_blue.webp",
+                    Color4f(0f, 0f, 1f, 1f)
+                );
+            });
+        });
+
+    }
+}
+
+
+/*
 unittest {
+    import randomdlibimage;
+
     SuperImage input = RandomImages.circles(500, 400);
     string filename = "test_simple.webp";
     saveIt(input, filename);
@@ -203,9 +317,12 @@ unittest {
 }
 
 unittest {
+    import randomdlibimage;
+
     auto img = RandomImages.circles(500, 400);
     saveWEBP(img, 100, "test_to_file.webp");
     saveLosslessWEBP(img, "test_to_file_lossless.webp");
     auto readedBack = loadWEBP("test_to_file_lossless.webp");
     readedBack.savePNG("test_to_file.png");
 }
+*/
