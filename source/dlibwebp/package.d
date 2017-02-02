@@ -253,14 +253,14 @@ debug (featureTest) {
             });
             f.scenario("Blue 1.0. Opacity 0.8.", {
                 colorTestLossless!(PixelFormat.RGBA8)(
-                    "lossless_RGBA8_blue.webp",
+                    "lossless_RGBA8_blue_alpha_0.8.webp",
                     Color4f(0f, 0f, 1f, 0.8f)
                 );
             });
-            f.scenario("Random image.", {
+            f.scenario("Random.", {
                 const fn = "lossless_RGBA8_random.webp";
                 {
-                    SuperImage img = RandomImages.circles!(PixelFormat.RGBA8)(100, 50);
+                    SuperImage img = RandomImages.circles!(PixelFormat.RGBA8)(500, 400);
                     // Alpha pixel.
                     img[0, 0] = Color4f(
                         img[0, 0].r,
@@ -309,9 +309,25 @@ debug (featureTest) {
             });
             f.scenario("Blue 1.0. Opacity 0.8.", {
                 colorTestLossless!(PixelFormat.RGBA16)(
-                    "lossless_RGBA16_blue.webp",
+                    "lossless_RGBA16_blue_alpha_0.8.webp",
                     Color4f(0f, 0f, 1f, 0.8f)
                 );
+            });
+            f.scenario("Random.", {
+                const fn = "lossless_RGBA16_random.webp";
+                {
+                    SuperImage img = RandomImages.circles!(PixelFormat.RGBA16)(500, 400);
+                    // Alpha pixel.
+                    img[0, 0] = Color4f(
+                        img[0, 0].r,
+                        img[0, 0].g,
+                        img[0, 0].b,
+                        0.8f);
+                    img.saveLosslessWEBP(fn);
+                }
+                SuperImage result = loadWEBP(fn);
+                abs(result[0, 0].a - 0.8f).shouldBeLessThan(0.02f); // Alpha pixel!
+                abs(result[1, 0].a - 1.0f).shouldBeLessThan(0.01f);
             });
         });
 
