@@ -1,4 +1,5 @@
 <a href="https://code.dlang.org/packages/dlib-webp" title="Go to dlib-webp"><img src="https://img.shields.io/dub/v/dlib-webp.svg" alt="Dub version"></a>
+[![Build Status](https://travis-ci.org/georgy7/dlib-webp.svg?branch=master)](https://travis-ci.org/georgy7/dlib-webp)
 
 ## Testing
 

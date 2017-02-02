@@ -1,0 +1,15 @@
+sudo: false
+
+language: d
+
+os:
+ - linux
+
+d:
+ - dmd-2.073.0
+ - dmd-2.072.2
+ - ldc-1.0.0
+ - ldc-1.1.0-beta6
+
+script:
+ - dub test --debug=featureTest
