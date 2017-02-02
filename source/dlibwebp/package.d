@@ -218,6 +218,20 @@ debug (featureTest) {
             }
         }
     }
+
+    private void assertTheSame8bitWithAlpha(SuperImage source, SuperImage result) {
+        foreach(int x; 0..result.width) {
+            foreach(int y; 0..result.height) {
+                Color4 expected = source[x, y].convert(8);
+                Color4 actual = result[x, y].convert(8);
+                expected.r.shouldEqual(actual.r);
+                expected.g.shouldEqual(actual.g);
+                expected.b.shouldEqual(actual.b);
+                expected.a.shouldEqual(actual.a);
+            }
+        }
+    }
+
     unittest {
 
         feature("Filesystem i/o RGBA8. Lossless.", (f) {
@@ -259,19 +273,20 @@ debug (featureTest) {
             });
             f.scenario("Random.", {
                 const fn = "lossless_RGBA8_random.webp";
-                {
-                    SuperImage img = RandomImages.circles!(PixelFormat.RGBA8)(500, 400);
-                    // Alpha pixel.
-                    img[0, 0] = Color4f(
-                        img[0, 0].r,
-                        img[0, 0].g,
-                        img[0, 0].b,
-                        0.8f);
-                    img.saveLosslessWEBP(fn);
-                }
+
+                SuperImage img = RandomImages.circles!(PixelFormat.RGBA8)(500, 400);
+                // Alpha pixel.
+                img[0, 0] = Color4f(
+                    img[0, 0].r,
+                    img[0, 0].g,
+                    img[0, 0].b,
+                    0.8f);
+                img.saveLosslessWEBP(fn);
+
                 SuperImage result = loadWEBP(fn);
                 abs(result[0, 0].a - 0.8f).shouldBeLessThan(0.02f); // Alpha pixel!
                 abs(result[1, 0].a - 1.0f).shouldBeLessThan(0.01f);
+                assertTheSame8bitWithAlpha(img, result);
             });
         });
 
@@ -315,19 +330,20 @@ debug (featureTest) {
             });
             f.scenario("Random.", {
                 const fn = "lossless_RGBA16_random.webp";
-                {
-                    SuperImage img = RandomImages.circles!(PixelFormat.RGBA16)(500, 400);
-                    // Alpha pixel.
-                    img[0, 0] = Color4f(
-                        img[0, 0].r,
-                        img[0, 0].g,
-                        img[0, 0].b,
-                        0.8f);
-                    img.saveLosslessWEBP(fn);
-                }
+
+                SuperImage img = RandomImages.circles!(PixelFormat.RGBA16)(500, 400);
+                // Alpha pixel.
+                img[0, 0] = Color4f(
+                    img[0, 0].r,
+                    img[0, 0].g,
+                    img[0, 0].b,
+                    0.8f);
+                img.saveLosslessWEBP(fn);
+
                 SuperImage result = loadWEBP(fn);
                 abs(result[0, 0].a - 0.8f).shouldBeLessThan(0.02f); // Alpha pixel!
                 abs(result[1, 0].a - 1.0f).shouldBeLessThan(0.01f);
+                assertTheSame8bitWithAlpha(img, result);
             });
         });
 
@@ -362,6 +378,13 @@ debug (featureTest) {
                     Color4f(0f, 0f, 1f, 1f)
                 );
             });
+            f.scenario("Random.", {
+                const fn = "lossless_RGB8_random.webp";
+                SuperImage source = RandomImages.circles!(PixelFormat.RGB8)(500, 400);
+                source.saveLosslessWEBP(fn);
+                SuperImage result = loadWEBP(fn);
+                assertTheSame8bitWithAlpha(source, result);
+            });
         });
 
 
@@ -395,6 +418,15 @@ debug (featureTest) {
                     "lossless_RGB16_blue.webp",
                     Color4f(0f, 0f, 1f, 1f)
                 );
+            });
+            f.scenario("Random.", {
+                const fn = "lossless_RGB16_random.webp";
+                SuperImage source = RandomImages.circles!(PixelFormat.RGB16)(500, 400);
+                source.saveLosslessWEBP(fn);
+                SuperImage result = loadWEBP(fn);
+                // WebP supports only 8 bits per channel anyway.
+                // And alpha channel will equal 1, just like in the source image.
+                assertTheSame8bitWithAlpha(source, result);
             });
         });
     }
