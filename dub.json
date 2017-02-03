@@ -1,6 +1,6 @@
 {
     "name": "dlib-webp",
-    "description": "saveWEBP and loadWEBP from/to SuperImage. It has alpha channel and lossless compression support.",
+    "description": "saveWEBP / saveLosslessWEBP / saveWEBPToArray / saveLosslessWEBPToArray / loadWEBP",
     "license": "BSL-1.0",
     "authors": [
         "Георгий Устинов"
