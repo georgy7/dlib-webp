@@ -47,4 +47,5 @@ Dependencies:
 
 - **libwebp** BSD 3-clause
 - **dlib** Boost Software License, Version 1.0
+- **feature-test-d** (for testing) MIT
 - **random-dlib-image** (for testing) Boost Software License, Version 1.0
