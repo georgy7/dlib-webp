@@ -12,7 +12,9 @@ d:
  - ldc-1.1.0-beta6
 
 before_install:
- - sudo apt-get install libwebp-dev 0.4.4-1
+ - sudo add-apt-repository ppa:lyrasis/precise-backports
+ - sudo apt-get update
+ - sudo apt-get install libwebp-dev
 
 script:
  - dub test --debug=featureTest
