@@ -449,23 +449,6 @@ unittest {
 
     auto inputRgba16 = convert!(Image!(PixelFormat.RGBA16))(RandomImages.circles(1920, 1080));
     saveIt(inputRgba16, "test_RGBA16.webp");
-
-    SuperImage red = new Image!(PixelFormat.RGBA8)(500, 400);
-    foreach(int x; 0..red.width) {
-        foreach(int y; 0..red.height) {
-            red[x, y] = Color4f(1f, 0f,0f,0.8f);
-        }
-    }
-    saveIt(red, "red_RGBA8.webp");
 }
 
-unittest {
-    import randomdlibimage;
-
-    auto img = RandomImages.circles(500, 400);
-    saveWEBP(img, 100, "test_to_file.webp");
-    saveLosslessWEBP(img, "test_to_file_lossless.webp");
-    auto readedBack = loadWEBP("test_to_file_lossless.webp");
-    readedBack.savePNG("test_to_file.png");
-}
 */
