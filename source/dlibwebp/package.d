@@ -7,7 +7,6 @@ private {
     import dlib.core.compound;
     import dlib.core.stream;
     import dlib.filesystem.local;
-    import core.memory : GC;
     import core.stdc.stdlib : free;
     import std.array;
 }
@@ -120,8 +119,9 @@ private ubyte[] saveLossyWithAlpha(SuperImage img, int quality) {
             img.width() * 4,
             quality,
             &outputPointer);
-    GC.addRange(outputPointer, outputSize);
-    return outputPointer[0 .. outputSize];
+    ubyte[] result = outputPointer[0 .. outputSize];
+    free(outputPointer);
+    return result;
 }
 private ubyte[] saveLossy(SuperImage img, int quality) {
     SuperImage inputImage = img;
@@ -136,8 +136,9 @@ private ubyte[] saveLossy(SuperImage img, int quality) {
             img.width() * 3,
             quality,
             &outputPointer);
-    GC.addRange(outputPointer, outputSize);
-    return outputPointer[0 .. outputSize];
+    ubyte[] result = outputPointer[0 .. outputSize];
+    free(outputPointer);
+    return result;
 }
 
 private ubyte[] saveLosslessWithAlpha(SuperImage img) {
@@ -152,8 +153,9 @@ private ubyte[] saveLosslessWithAlpha(SuperImage img) {
             img.height(),
             img.width() * 4,
             &outputPointer);
-    GC.addRange(outputPointer, outputSize);
-    return outputPointer[0 .. outputSize];
+    ubyte[] result = outputPointer[0 .. outputSize];
+    free(outputPointer);
+    return result;
 }
 private ubyte[] saveLossless(SuperImage img) {
     SuperImage inputImage = img;
@@ -167,8 +169,9 @@ private ubyte[] saveLossless(SuperImage img) {
             img.height(),
             img.width() * 3,
             &outputPointer);
-    GC.addRange(outputPointer, outputSize);
-    return outputPointer[0 .. outputSize];
+    ubyte[] result = outputPointer[0 .. outputSize];
+    free(outputPointer);
+    return result;
 }
 
 /*
