@@ -8,6 +8,7 @@ private {
     import dlib.core.stream;
     import dlib.filesystem.local;
     import core.memory : GC;
+    import core.stdc.stdlib : free;
     import std.array;
 }
 
@@ -43,13 +44,13 @@ SuperImage loadWEBP(in ubyte[] webp) {
     int width;
     int height;
     ubyte* argbPointer = WebPDecodeRGBA(webp.ptr, webp.length, &width, &height);
-    GC.addRange(argbPointer, (width * height * 4));
     ubyte[] argbArray = argbPointer[0 .. (width * height * 4)];
 
     SuperImage rgbaImage = defaultImageFactory.createImage(width, height, 4, 8);
     foreach(i, v; argbArray) {
         rgbaImage.data[i] = v;
     }
+    free(argbPointer);
     return rgbaImage;
 }
 
