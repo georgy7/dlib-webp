@@ -1,6 +1,6 @@
 [![Dub version](https://img.shields.io/dub/v/dlib-webp.svg)](https://code.dlang.org/packages/dlib-webp)
 [![Build Status](https://travis-ci.org/georgy7/dlib-webp.svg?branch=master)](https://travis-ci.org/georgy7/dlib-webp)
-[![Coverage Status](https://coveralls.io/repos/georgy7/dlib-webp/badge.svg)](https://coveralls.io/r/georgy7/dlib-webp)
+[![Coverage Status](https://coveralls.io/repos/github/georgy7/dlib-webp/badge.svg?branch=master)](https://coveralls.io/github/georgy7/dlib-webp?branch=master)
 
 ## Testing
 
