@@ -65,13 +65,13 @@ debug (featureTest) {
             });
             f.scenario("Red 0.5", {
                 colorTestLossless!(PixelFormat.RGBA8)(
-                    "ll_RGBA8_red_0.5.webp",
+                    "ll_RGBA8_red_0_5.webp",
                     Color4f(0.5f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.01", {
                 colorTestLossless!(PixelFormat.RGBA8)(
-                    "ll_RGBA8_red_0.01.webp",
+                    "ll_RGBA8_red_0_01.webp",
                     Color4f(0.01f, 0f, 0f, 1f)
                 );
             });
@@ -89,7 +89,7 @@ debug (featureTest) {
             });
             f.scenario("Blue 1.0. Opacity 0.8.", {
                 colorTestLossless!(PixelFormat.RGBA8)(
-                    "ll_RGBA8_blue_alpha_0.8.webp",
+                    "ll_RGBA8_blue_alpha_0_8.webp",
                     Color4f(0f, 0f, 1f, 0.8f)
                 );
             });
@@ -122,13 +122,13 @@ debug (featureTest) {
             });
             f.scenario("Red 0.5", {
                 colorTestLossless!(PixelFormat.RGBA16)(
-                    "ll_RGBA16_red_0.5.webp",
+                    "ll_RGBA16_red_0_5.webp",
                     Color4f(0.5f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.01", {
                 colorTestLossless!(PixelFormat.RGBA16)(
-                    "ll_RGBA16_red_0.01.webp",
+                    "ll_RGBA16_red_0_01.webp",
                     Color4f(0.01f, 0f, 0f, 1f)
                 );
             });
@@ -146,7 +146,7 @@ debug (featureTest) {
             });
             f.scenario("Blue 1.0. Opacity 0.8.", {
                 colorTestLossless!(PixelFormat.RGBA16)(
-                    "ll_RGBA16_blue_alpha_0.8.webp",
+                    "ll_RGBA16_blue_alpha_0_8.webp",
                     Color4f(0f, 0f, 1f, 0.8f)
                 );
             });
@@ -178,13 +178,13 @@ debug (featureTest) {
             });
             f.scenario("Red 0.5", {
                 colorTestLossless!(PixelFormat.RGB8)(
-                    "ll_RGB8_red_0.5.webp",
+                    "ll_RGB8_red_0_5.webp",
                     Color4f(0.5f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.01", {
                 colorTestLossless!(PixelFormat.RGB8)(
-                    "ll_RGB8_red_0.01.webp",
+                    "ll_RGB8_red_0_01.webp",
                     Color4f(0.01f, 0f, 0f, 1f)
                 );
             });
@@ -219,13 +219,13 @@ debug (featureTest) {
             });
             f.scenario("Red 0.5", {
                 colorTestLossless!(PixelFormat.RGB16)(
-                    "ll_RGB16_red_0.5.webp",
+                    "ll_RGB16_red_0_5.webp",
                     Color4f(0.5f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.01", {
                 colorTestLossless!(PixelFormat.RGB16)(
-                    "ll_RGB16_red_0.01.webp",
+                    "ll_RGB16_red_0_01.webp",
                     Color4f(0.01f, 0f, 0f, 1f)
                 );
             });
