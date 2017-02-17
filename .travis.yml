@@ -11,7 +11,7 @@ d:
 
 before_install:
  - sudo apt-get -y install ppa-purge
- - sudo ppa-purge ppa:rwky/redis
+ - sudo ppa-purge ppa:rwky/redis; echo
  - sudo add-apt-repository ppa:lyrasis/precise-backports -y
  - sudo apt-get update
  - sudo apt-get install libwebp-dev
