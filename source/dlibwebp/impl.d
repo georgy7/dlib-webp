@@ -1,6 +1,6 @@
 module dlibwebp.impl;
 
-import dlibwebp.api;
+import api = dlibwebp.api;
 
 import dlib.image;
 import webp.encode;
@@ -56,7 +56,7 @@ package void saveWEBP(SuperImage img, int quality, string filename) {
     output.close();
 
     if (!res[0]) {
-        throw new WEBPLoadException(res[1]);
+        throw new api.WEBPLoadException(res[1]);
     }
 }
 package void saveLosslessWEBP(SuperImage img, string filename) {
@@ -65,19 +65,43 @@ package void saveLosslessWEBP(SuperImage img, string filename) {
     output.close();
 
     if (!res[0]) {
-        throw new WEBPLoadException(res[1]);
+        throw new api.WEBPLoadException(res[1]);
     }
 }
 
 package Compound!(bool, string) saveWEBP(SuperImage img, int quality, OutputStream output) {
-    ubyte[] result = saveWEBPToArray(img, quality);
+    ubyte[] result;
+    try {
+        result = saveWEBPToArray(img, quality);
+    } catch (api.WEBPLoadException e) {
+        if (e.msg.empty) {
+            return compound(false, "Exception occurred during to saving to the array.");
+        } else {
+            return compound(false, e.msg);
+        }
+    }
+    if (result.length < 1) {
+        return compound(false, "Empty result.");
+    }
     if (!output.writeArray(result)) {
         return compound(false, "Could not write the result to the output stream.");
     }
     return compound(true, "");
 }
 package Compound!(bool, string) saveLosslessWEBP(SuperImage img, OutputStream output) {
-    ubyte[] result = saveLosslessWEBPToArray(img);
+    ubyte[] result;
+    try {
+        result = saveLosslessWEBPToArray(img);
+    } catch (api.WEBPLoadException e) {
+        if (e.msg.empty) {
+            return compound(false, "Exception occurred during to saving to the array.");
+        } else {
+            return compound(false, e.msg);
+        }
+    }
+    if (result.length < 1) {
+        return compound(false, "Empty result.");
+    }
     if (!output.writeArray(result)) {
         return compound(false, "Could not write the result to the output stream.");
     }
@@ -150,9 +174,9 @@ private ubyte[] saveLosslessWithAlpha(SuperImage img) {
     ubyte* outputPointer;
     size_t outputSize = WebPEncodeLosslessRGBA(
             inputImage.data.ptr,
-            img.width(),
-            img.height(),
-            img.width() * 4,
+            inputImage.width(),
+            inputImage.height(),
+            inputImage.width() * 4,
             &outputPointer);
     ubyte[] result = outputPointer[0 .. outputSize];
     free(outputPointer);
@@ -166,9 +190,9 @@ private ubyte[] saveLossless(SuperImage img) {
     ubyte* outputPointer;
     size_t outputSize = WebPEncodeLosslessRGB(
             inputImage.data.ptr,
-            img.width(),
-            img.height(),
-            img.width() * 3,
+            inputImage.width(),
+            inputImage.height(),
+            inputImage.width() * 3,
             &outputPointer);
     ubyte[] result = outputPointer[0 .. outputSize];
     free(outputPointer);

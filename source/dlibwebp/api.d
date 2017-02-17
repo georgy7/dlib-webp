@@ -67,10 +67,16 @@ Compound!(bool, string) saveLosslessWEBP(SuperImage img, OutputStream output) {
 }
 
 
+/++
+ + Throws: WEBPLoadException.
+ +/
 ubyte[] saveWEBPToArray(SuperImage img, int quality) {
     return impl.saveWEBPToArray(img, quality);
 }
 
+/++
+ + Throws: WEBPLoadException.
+ +/
 ubyte[] saveLosslessWEBPToArray(SuperImage img) {
     return impl.saveLosslessWEBPToArray(img);
 }
