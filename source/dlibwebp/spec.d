@@ -59,42 +59,42 @@ debug (featureTest) {
         feature("Filesystem i/o RGBA8. Lossless.", (f) {
             f.scenario("Red 1.0", {
                 colorTestLossless!(PixelFormat.RGBA8)(
-                    "lossless_RGBA8_red.webp",
+                    "ll_RGBA8_red.webp",
                     Color4f(1f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.5", {
                 colorTestLossless!(PixelFormat.RGBA8)(
-                    "lossless_RGBA8_red_0.5.webp",
+                    "ll_RGBA8_red_0.5.webp",
                     Color4f(0.5f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.01", {
                 colorTestLossless!(PixelFormat.RGBA8)(
-                    "lossless_RGBA8_red_0.01.webp",
+                    "ll_RGBA8_red_0.01.webp",
                     Color4f(0.01f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Green 1.0", {
                 colorTestLossless!(PixelFormat.RGBA8)(
-                    "lossless_RGBA8_green.webp",
+                    "ll_RGBA8_green.webp",
                     Color4f(0f, 1f, 0f, 1f)
                 );
             });
             f.scenario("Blue 1.0", {
                 colorTestLossless!(PixelFormat.RGBA8)(
-                    "lossless_RGBA8_blue.webp",
+                    "ll_RGBA8_blue.webp",
                     Color4f(0f, 0f, 1f, 1f)
                 );
             });
             f.scenario("Blue 1.0. Opacity 0.8.", {
                 colorTestLossless!(PixelFormat.RGBA8)(
-                    "lossless_RGBA8_blue_alpha_0.8.webp",
+                    "ll_RGBA8_blue_alpha_0.8.webp",
                     Color4f(0f, 0f, 1f, 0.8f)
                 );
             });
             f.scenario("Random.", {
-                const fn = "lossless_RGBA8_random.webp";
+                const fn = "ll_RGBA8_random.webp";
 
                 SuperImage img = RandomImages.circles!(PixelFormat.RGBA8)(500, 400);
                 // Alpha pixel.
@@ -116,42 +116,42 @@ debug (featureTest) {
         feature("Filesystem i/o RGBA16. Lossless.", (f) {
             f.scenario("Red 1.0", {
                 colorTestLossless!(PixelFormat.RGBA16)(
-                    "lossless_RGBA16_red.webp",
+                    "ll_RGBA16_red.webp",
                     Color4f(1f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.5", {
                 colorTestLossless!(PixelFormat.RGBA16)(
-                    "lossless_RGBA16_red_0.5.webp",
+                    "ll_RGBA16_red_0.5.webp",
                     Color4f(0.5f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.01", {
                 colorTestLossless!(PixelFormat.RGBA16)(
-                    "lossless_RGBA16_red_0.01.webp",
+                    "ll_RGBA16_red_0.01.webp",
                     Color4f(0.01f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Green 1.0", {
                 colorTestLossless!(PixelFormat.RGBA16)(
-                    "lossless_RGBA16_green.webp",
+                    "ll_RGBA16_green.webp",
                     Color4f(0f, 1f, 0f, 1f)
                 );
             });
             f.scenario("Blue 1.0", {
                 colorTestLossless!(PixelFormat.RGBA16)(
-                    "lossless_RGBA16_blue.webp",
+                    "ll_RGBA16_blue.webp",
                     Color4f(0f, 0f, 1f, 1f)
                 );
             });
             f.scenario("Blue 1.0. Opacity 0.8.", {
                 colorTestLossless!(PixelFormat.RGBA16)(
-                    "lossless_RGBA16_blue_alpha_0.8.webp",
+                    "ll_RGBA16_blue_alpha_0.8.webp",
                     Color4f(0f, 0f, 1f, 0.8f)
                 );
             });
             f.scenario("Random.", {
-                const fn = "lossless_RGBA16_random.webp";
+                const fn = "ll_RGBA16_random.webp";
 
                 SuperImage img = RandomImages.circles!(PixelFormat.RGBA16)(500, 400);
                 // Alpha pixel.
@@ -172,36 +172,36 @@ debug (featureTest) {
         feature("Filesystem i/o RGB-8. Lossless.", (f) {
             f.scenario("Red 1.0", {
                 colorTestLossless!(PixelFormat.RGB8)(
-                    "lossless_RGB8_red.webp",
+                    "ll_RGB8_red.webp",
                     Color4f(1f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.5", {
                 colorTestLossless!(PixelFormat.RGB8)(
-                    "lossless_RGB8_red_0.5.webp",
+                    "ll_RGB8_red_0.5.webp",
                     Color4f(0.5f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.01", {
                 colorTestLossless!(PixelFormat.RGB8)(
-                    "lossless_RGB8_red_0.01.webp",
+                    "ll_RGB8_red_0.01.webp",
                     Color4f(0.01f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Green 1.0", {
                 colorTestLossless!(PixelFormat.RGB8)(
-                    "lossless_RGB8_green.webp",
+                    "ll_RGB8_green.webp",
                     Color4f(0f, 1f, 0f, 1f)
                 );
             });
             f.scenario("Blue 1.0", {
                 colorTestLossless!(PixelFormat.RGB8)(
-                    "lossless_RGB8_blue.webp",
+                    "ll_RGB8_blue.webp",
                     Color4f(0f, 0f, 1f, 1f)
                 );
             });
             f.scenario("Random.", {
-                const fn = "lossless_RGB8_random.webp";
+                const fn = "ll_RGB8_random.webp";
                 SuperImage source = RandomImages.circles!(PixelFormat.RGB8)(500, 400);
                 source.saveLosslessWEBP(fn);
                 SuperImage result = loadWEBP(fn);
@@ -213,36 +213,36 @@ debug (featureTest) {
         feature("Filesystem i/o RGB-16. Lossless.", (f) {
             f.scenario("Red 1.0", {
                 colorTestLossless!(PixelFormat.RGB16)(
-                    "lossless_RGB16_red.webp",
+                    "ll_RGB16_red.webp",
                     Color4f(1f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.5", {
                 colorTestLossless!(PixelFormat.RGB16)(
-                    "lossless_RGB16_red_0.5.webp",
+                    "ll_RGB16_red_0.5.webp",
                     Color4f(0.5f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Red 0.01", {
                 colorTestLossless!(PixelFormat.RGB16)(
-                    "lossless_RGB16_red_0.01.webp",
+                    "ll_RGB16_red_0.01.webp",
                     Color4f(0.01f, 0f, 0f, 1f)
                 );
             });
             f.scenario("Green 1.0", {
                 colorTestLossless!(PixelFormat.RGB16)(
-                    "lossless_RGB16_green.webp",
+                    "ll_RGB16_green.webp",
                     Color4f(0f, 1f, 0f, 1f)
                 );
             });
             f.scenario("Blue 1.0", {
                 colorTestLossless!(PixelFormat.RGB16)(
-                    "lossless_RGB16_blue.webp",
+                    "ll_RGB16_blue.webp",
                     Color4f(0f, 0f, 1f, 1f)
                 );
             });
             f.scenario("Random.", {
-                const fn = "lossless_RGB16_random.webp";
+                const fn = "ll_RGB16_random.webp";
                 SuperImage source = RandomImages.circles!(PixelFormat.RGB16)(500, 400);
                 source.saveLosslessWEBP(fn);
                 SuperImage result = loadWEBP(fn);
