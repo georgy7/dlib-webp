@@ -1,5 +1,6 @@
 lib/
 *.settings
+*.lst
 workspace.dlangidews.wssettings
 .dub/
 dub.selections.json
