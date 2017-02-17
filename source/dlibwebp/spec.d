@@ -2,6 +2,8 @@ module dlibwebp.spec;
 
 import dlibwebp.api;
 import dlib.image;
+import std.exception;
+import exceptions;
 
 /**
  * Run the tests like this:
@@ -55,6 +57,30 @@ debug (featureTest) {
     }
 
     unittest {
+
+        feature("Filesystem errors.", (f) {
+            f.scenario("Invalid filename lossless.", {
+                auto invalidFileName = "tttest";
+                for (int i = 0; i < 10000; i++) {
+                    invalidFileName ~= "_";
+                }
+                invalidFileName ~= "test:*?.webp";
+
+                // Invalid for the most of file systems.
+                // https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
+
+                bool thrownIoException = false;
+                try {
+                    colorTestLossless!(PixelFormat.RGBA8)(
+                        invalidFileName,
+                        Color4f(1f, 0f, 0f, 1f)
+                    );
+                } catch (IOException e) {
+                    thrownIoException = true;
+                }
+                thrownIoException.shouldBeTrue();
+            });
+        });
 
         feature("Filesystem i/o RGBA8. Lossless.", (f) {
             f.scenario("Red 1.0", {

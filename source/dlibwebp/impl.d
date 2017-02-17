@@ -10,6 +10,7 @@ import dlib.core.stream;
 import dlib.filesystem.local;
 import core.stdc.stdlib : free;
 import std.array;
+import exceptions;
 
 
 
@@ -51,7 +52,13 @@ package SuperImage loadWEBP(in ubyte[] webp) {
 
 
 package void saveWEBP(SuperImage img, int quality, string filename) {
-    OutputStream output = openForOutput(filename);
+    OutputStream output;
+    try {
+        output = openForOutput(filename);
+    } catch (Exception e) {
+        throw new IOException("Could now open file for write.\n" ~ e.msg);
+    }
+
     Compound!(bool, string) res = saveWEBP(img, quality, output);
     output.close();
 
@@ -60,7 +67,13 @@ package void saveWEBP(SuperImage img, int quality, string filename) {
     }
 }
 package void saveLosslessWEBP(SuperImage img, string filename) {
-    OutputStream output = openForOutput(filename);
+    OutputStream output;
+    try {
+        output = openForOutput(filename);
+    } catch (Exception e) {
+        throw new IOException("Could now open file for write.\n" ~ e.msg);
+    }
+
     Compound!(bool, string) res = saveLosslessWEBP(img, output);
     output.close();
 

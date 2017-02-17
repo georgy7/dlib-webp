@@ -10,6 +10,7 @@
     "targetType": "staticLibrary",
     "targetPath": "lib",
     "dependencies": {
+        "exceptions": "~>0.0.1",
         "dlib": "~>0.10.0",
         "libwebp": "~>0.4.4",
         "feature-test-d": "~>1.0.4",
