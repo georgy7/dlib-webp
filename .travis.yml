@@ -10,7 +10,7 @@ d:
  - ldc-1.1.0
 
 before_install:
- - sudo apt-get install ppa-purge
+ - sudo apt-get -y install ppa-purge
  - sudo ppa-purge ppa:rwky/redis
  - sudo add-apt-repository ppa:lyrasis/precise-backports -y
  - sudo apt-get update
