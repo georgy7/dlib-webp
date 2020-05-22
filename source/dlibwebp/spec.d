@@ -12,7 +12,6 @@ import exceptions;
  */
 debug (featureTest) {
     import feature_test;
-    import randomdlibimage;
     import std.math;
 
     private SuperImage createImageWithColour(PixelFormat format)(int w, int h, Color4f c) {
@@ -57,6 +56,8 @@ debug (featureTest) {
     }
 
     unittest {
+
+        import dlibwebp.random;
 
         feature("Filesystem errors.", (f) {
             f.scenario("Invalid filename lossless.", {
@@ -283,7 +284,7 @@ debug (featureTest) {
 
 /*
 unittest {
-    import randomdlibimage;
+    import dlibwebp.random;
 
     SuperImage input = RandomImages.circles(500, 400);
     string filename = "test_simple.webp";

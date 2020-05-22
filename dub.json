@@ -11,9 +11,8 @@
     "targetPath": "lib",
     "dependencies": {
         "exceptions": "~>0.1.1",
-        "dlib": "~>0.10.0",
+        "dlib": "~>0.18.0",
         "libwebp": "~>0.4.4",
-        "feature-test-d": "~>1.0.4",
-        "random-dlib-image": "~>1.0.4"
+        "feature-test-d": "~>1.0.4"
     }
 }
