@@ -46,7 +46,6 @@ Boost Software License, Version 1.0 http://www.boost.org/LICENSE_1_0.txt
 
 Dependencies:
 
-- **libwebp** BSD 3-clause
-- **dlib** Boost Software License, Version 1.0
-- **feature-test-d** (for testing) MIT
-- **random-dlib-image** (for testing) Boost Software License, Version 1.0
+- **[libwebp](https://code.dlang.org/packages/libwebp)** BSD 3-clause
+- **[dlib](https://github.com/gecko0307/dlib/)** Boost Software License, Version 1.0
+- **[feature-test-d](https://github.com/dmonagle/feature-test-d)** (for testing) MIT
