@@ -42,7 +42,7 @@ enum WEBPQuality : int
     LOSSLESS = -1,
     LOWEST = 0,
     LOW = 50,
-    MEDIUM = 75,
+    DEFAULT = 75,
     HIGH = 80,
     HIGHEST = 100
 }
@@ -51,7 +51,7 @@ enum WEBPQuality : int
 /++
  + Throws: WEBPLoadException.
  +/
-void saveWEBP(SuperImage img, string filename, int quality = WEBPQuality.MEDIUM)
+void saveWEBP(SuperImage img, string filename, int quality = WEBPQuality.DEFAULT)
 {
     assert(quality >= WEBPQuality.LOSSLESS);
     assert(quality <= WEBPQuality.HIGHEST);
@@ -81,7 +81,7 @@ void saveLosslessWEBP(SuperImage img, string filename)
 /++
  + Returns: `false` and an error message on failure.
  +/
-Compound!(bool, string) saveWEBP(SuperImage img, OutputStream output, int quality = WEBPQuality.MEDIUM)
+Compound!(bool, string) saveWEBP(SuperImage img, OutputStream output, int quality = WEBPQuality.DEFAULT)
 {
     assert(quality >= WEBPQuality.LOSSLESS);
     assert(quality <= WEBPQuality.HIGHEST);
@@ -111,7 +111,7 @@ Compound!(bool, string) saveLosslessWEBP(SuperImage img, OutputStream output)
 /++
  + Throws: WEBPLoadException.
  +/
-ubyte[] saveWEBPToArray(SuperImage img, int quality = WEBPQuality.MEDIUM)
+ubyte[] saveWEBPToArray(SuperImage img, int quality = WEBPQuality.DEFAULT)
 {
     assert(quality >= WEBPQuality.LOSSLESS);
     assert(quality <= WEBPQuality.HIGHEST);
