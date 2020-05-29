@@ -150,6 +150,8 @@ private ubyte[] saveLossyWithAlpha(SuperImage img, int quality) {
     SuperImage inputImage = img;
     if (PixelFormat.RGBA8 != img.pixelFormat) {
         inputImage = convert!(Image!(PixelFormat.RGBA8))(img);
+        assert(inputImage.width == img.width);
+        assert(inputImage.height == img.height);
     }
     ubyte* outputPointer;
     size_t outputSize = WebPEncodeRGBA(
@@ -167,6 +169,8 @@ private ubyte[] saveLossy(SuperImage img, int quality) {
     SuperImage inputImage = img;
     if (PixelFormat.RGB8 != img.pixelFormat) {
         inputImage = convert!(Image!(PixelFormat.RGB8))(img);
+        assert(inputImage.width == img.width);
+        assert(inputImage.height == img.height);
     }
     ubyte* outputPointer;
     size_t outputSize = WebPEncodeRGB(
@@ -185,6 +189,8 @@ private ubyte[] saveLosslessWithAlpha(SuperImage img) {
     SuperImage inputImage = img;
     if (PixelFormat.RGBA8 != img.pixelFormat) {
         inputImage = convert!(Image!(PixelFormat.RGBA8))(img);
+        assert(inputImage.width == img.width);
+        assert(inputImage.height == img.height);
     }
     ubyte* outputPointer;
     size_t outputSize = WebPEncodeLosslessRGBA(
@@ -201,6 +207,8 @@ private ubyte[] saveLossless(SuperImage img) {
     SuperImage inputImage = img;
     if (PixelFormat.RGB8 != img.pixelFormat) {
         inputImage = convert!(Image!(PixelFormat.RGB8))(img);
+        assert(inputImage.width == img.width);
+        assert(inputImage.height == img.height);
     }
     ubyte* outputPointer;
     size_t outputSize = WebPEncodeLosslessRGB(

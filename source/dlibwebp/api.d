@@ -37,48 +37,98 @@ SuperImage loadWEBP(in ubyte[] webp) {
 }
 
 
-
-/++
- + Throws: WEBPLoadException.
- +/
-void saveWEBP(SuperImage img, int quality, string filename) {
-    return impl.saveWEBP(img, quality, filename);
+enum WEBPQuality : int
+{
+    LOSSLESS = -1,
+    LOWEST = 0,
+    LOW = 50,
+    MEDIUM = 75,
+    HIGH = 80,
+    HIGHEST = 100
 }
 
+
 /++
  + Throws: WEBPLoadException.
  +/
-void saveLosslessWEBP(SuperImage img, string filename) {
-    return impl.saveLosslessWEBP(img, filename);
+void saveWEBP(SuperImage img, string filename, int quality = WEBPQuality.MEDIUM)
+{
+    assert(quality >= WEBPQuality.LOSSLESS);
+    assert(quality <= WEBPQuality.HIGHEST);
+
+    if (WEBPQuality.LOSSLESS == quality)
+    {
+        return impl.saveLosslessWEBP(img, filename);
+    }
+    else
+    {
+        return impl.saveWEBP(img, quality, filename);
+    }
+}
+
+deprecated("Use img.saveWEBP(filename, quality) instead.")
+void saveWEBP(SuperImage img, int quality, string filename)
+{
+    return img.saveWEBP(filename, quality);
+}
+
+deprecated("Use img.saveWEBP(filename, WEBPQuality.LOSSLESS) instead.")
+void saveLosslessWEBP(SuperImage img, string filename)
+{
+    return img.saveWEBP(filename, WEBPQuality.LOSSLESS);
 }
 
 /++
  + Returns: `false` and an error message on failure.
  +/
-Compound!(bool, string) saveWEBP(SuperImage img, int quality, OutputStream output) {
-    return impl.saveWEBP(img, quality, output);
+Compound!(bool, string) saveWEBP(SuperImage img, OutputStream output, int quality = WEBPQuality.MEDIUM)
+{
+    assert(quality >= WEBPQuality.LOSSLESS);
+    assert(quality <= WEBPQuality.HIGHEST);
+
+    if (WEBPQuality.LOSSLESS == quality)
+    {
+        return impl.saveLosslessWEBP(img, output);
+    }
+    else
+    {
+        return impl.saveWEBP(img, quality, output);
+    }
 }
 
-/++
- + Returns: `false` and an error message on failure.
- +/
-Compound!(bool, string) saveLosslessWEBP(SuperImage img, OutputStream output) {
-    return impl.saveLosslessWEBP(img, output);
+deprecated("Use img.saveWEBP(output, quality) instead.")
+Compound!(bool, string) saveWEBP(SuperImage img, int quality, OutputStream output)
+{
+    return img.saveWEBP(output, quality);
 }
 
+deprecated("Use img.saveWEBP(output, WEBPQuality.LOSSLESS) instead.")
+Compound!(bool, string) saveLosslessWEBP(SuperImage img, OutputStream output)
+{
+    return img.saveWEBP(output, WEBPQuality.LOSSLESS);
+}
 
 /++
  + Throws: WEBPLoadException.
  +/
-ubyte[] saveWEBPToArray(SuperImage img, int quality) {
-    return impl.saveWEBPToArray(img, quality);
+ubyte[] saveWEBPToArray(SuperImage img, int quality = WEBPQuality.MEDIUM)
+{
+    assert(quality >= WEBPQuality.LOSSLESS);
+    assert(quality <= WEBPQuality.HIGHEST);
+
+    if (WEBPQuality.LOSSLESS == quality)
+    {
+        return impl.saveLosslessWEBPToArray(img);
+    }
+    else
+    {
+        return impl.saveWEBPToArray(img, quality);
+    }
 }
 
-/++
- + Throws: WEBPLoadException.
- +/
+deprecated("Use img.saveWEBPToArray(WEBPQuality.LOSSLESS) instead.")
 ubyte[] saveLosslessWEBPToArray(SuperImage img) {
-    return impl.saveLosslessWEBPToArray(img);
+    return img.saveWEBPToArray(WEBPQuality.LOSSLESS);
 }
 
 

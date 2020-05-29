@@ -23,10 +23,11 @@ debug (featureTest) {
         }
         return img;
     }
+
     private void colorTestLossless(PixelFormat format)(in string fn, Color4f c) {
         {
             SuperImage redNonTransparent = createImageWithColour!(format)(500, 400, c);
-            redNonTransparent.saveLosslessWEBP(fn);
+            redNonTransparent.saveWEBP(fn, WEBPQuality.LOSSLESS);
         }
         SuperImage result = loadWEBP(fn);
         foreach(int x; 0..result.width) {
@@ -122,6 +123,7 @@ debug (featureTest) {
             });
             f.scenario("Random.", {
                 const fn = "ll_RGBA8_random.webp";
+                const fnDefault = "ll_RGBA8_random_default.webp";
 
                 SuperImage img = RandomImages.circles!(PixelFormat.RGBA8)(500, 400);
                 // Alpha pixel.
@@ -130,12 +132,21 @@ debug (featureTest) {
                     img[0, 0].g,
                     img[0, 0].b,
                     0.8f);
-                img.saveLosslessWEBP(fn);
+                img.saveWEBP(fn, WEBPQuality.LOSSLESS);
 
                 SuperImage result = loadWEBP(fn);
+                result.pixelFormat.shouldEqual(PixelFormat.RGBA8);
+                result.width.shouldEqual(img.width);
+                result.height.shouldEqual(img.height);
+
                 abs(result[0, 0].a - 0.8f).shouldBeLessThan(0.02f); // Alpha pixel!
                 abs(result[1, 0].a - 1.0f).shouldBeLessThan(0.01f);
                 assertTheSame8bitWithAlpha(img, result);
+
+                img.saveWEBP(fnDefault);
+                SuperImage resultDefault = loadWEBP(fnDefault);
+                resultDefault.width.shouldEqual(img.width);
+                resultDefault.height.shouldEqual(img.height);
             });
         });
 
@@ -187,9 +198,13 @@ debug (featureTest) {
                     img[0, 0].g,
                     img[0, 0].b,
                     0.8f);
-                img.saveLosslessWEBP(fn);
+                img.saveWEBP(fn, WEBPQuality.LOSSLESS);
 
                 SuperImage result = loadWEBP(fn);
+                result.pixelFormat.shouldEqual(PixelFormat.RGBA8);  // Webp does not support 16-bit colors.
+                result.width.shouldEqual(img.width);
+                result.height.shouldEqual(img.height);
+
                 abs(result[0, 0].a - 0.8f).shouldBeLessThan(0.02f); // Alpha pixel!
                 abs(result[1, 0].a - 1.0f).shouldBeLessThan(0.01f);
                 assertTheSame8bitWithAlpha(img, result);
@@ -230,7 +245,7 @@ debug (featureTest) {
             f.scenario("Random.", {
                 const fn = "ll_RGB8_random.webp";
                 SuperImage source = RandomImages.circles!(PixelFormat.RGB8)(500, 400);
-                source.saveLosslessWEBP(fn);
+                source.saveWEBP(fn, WEBPQuality.LOSSLESS);
                 SuperImage result = loadWEBP(fn);
                 assertTheSame8bitWithAlpha(source, result);
             });
@@ -271,7 +286,7 @@ debug (featureTest) {
             f.scenario("Random.", {
                 const fn = "ll_RGB16_random.webp";
                 SuperImage source = RandomImages.circles!(PixelFormat.RGB16)(500, 400);
-                source.saveLosslessWEBP(fn);
+                source.saveWEBP(fn, WEBPQuality.LOSSLESS);
                 SuperImage result = loadWEBP(fn);
                 // WebP supports only 8 bits per channel anyway.
                 // And alpha channel will equal 1, just like in the source image.
@@ -280,24 +295,3 @@ debug (featureTest) {
         });
     }
 }
-
-
-/*
-unittest {
-    import dlibwebp.random;
-
-    SuperImage input = RandomImages.circles(500, 400);
-    string filename = "test_simple.webp";
-    saveIt(input, filename);
-
-    auto inputL8 = convert!(Image!(PixelFormat.L8))(RandomImages.circles(500, 400));
-    saveIt(inputL8, "test_L8.webp");
-
-    auto inputLA8 = convert!(Image!(PixelFormat.LA8))(RandomImages.circles(500, 400));
-    saveIt(inputLA8, "test_LA8.webp");
-
-    auto inputRgba16 = convert!(Image!(PixelFormat.RGBA16))(RandomImages.circles(1920, 1080));
-    saveIt(inputRgba16, "test_RGBA16.webp");
-}
-
-*/

@@ -14,26 +14,33 @@ import dlibwebp;
 
 void main() {
   auto img = loadPNG("input.png");
-  
-  // 0 is the worst quality, 100 is the best.
+
+  // Medium quality.
+  img.saveWEBP("quality.webp");
+
+  img.saveWEBP("q50.webp", 50);
+
+  img.saveWEBP("hq.webp", WEBPQuality.HIGH);
+
   // But it is still YUV 4:2:0.
-  img.saveWEBP(50, "quality50.webp");
-  
+  img.saveWEBP("q100.webp", WEBPQuality.HIGHEST);
+
   // And it is not.
-  img.saveLosslessWEBP("lossless.webp");
-  
+  img.saveWEBP("lossless.webp", WEBPQuality.LOSSLESS);
+
   // You may want to use the streaming API
   // just like savePNG, saveTGA, etc.
-  // auto res = img.saveWEBP(50, outputStream);
-  
+  // auto res = img.saveWEBP(outputStream, 50);
+
   // Also, you can save to arrays:
-  // ubyte[] lossy = img.saveWEBPToArray(50);
-  // ubyte[] lossless = img.saveLosslessWEBPToArray();
-  
+  // ubyte[] lossy = img.saveWEBPToArray();
+  // ubyte[] lossy50 = img.saveWEBPToArray(50);
+  // ubyte[] lossless = img.saveWEBPToArray(WEBPQuality.LOSSLESS);
+
   // And back.
   auto readBack = loadWEBP("lossless.webp");
   readBack.savePNG("lossless.png");
-  
+
   // Also available:
   // loadWEBP(inputStream)
   // loadWEBP(ubyte[])
